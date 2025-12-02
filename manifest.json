@@ -1,0 +1,61 @@
+{
+  "author": "fanmcgrady",
+  "manifest_version": 3,
+  "name": "SCUCaptchAI",
+  "description": "四川大学统一门户验证码AI自动填写插件",
+  "version": "20251207",
+  "icons": {
+    "16": "img/logo.png",
+    "48": "img/logo.png",
+    "128": "img/logo.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": "img/logo.png",
+    "default_popup": "popup.html",
+    "default_title": "SCUCaptchAI - AI验证码识别"
+  },
+  "content_scripts": [
+    {
+      "js": ["js/content_script.js"],
+      "matches": [
+        "*://id.scu.edu.cn/frontend/login*",
+        "*://id-443.webvpn.scu.edu.cn/frontend/login*",
+        "*://https-id-scu-edu-cn-443.webvpn.scu.edu.cn/frontend/login*"
+      ]
+    },
+    {
+      "js": ["js/content_script_urp.js"],
+      "matches": [
+        "*://202.115.47.141/login*",
+        "*://zhjw.scu.edu.cn/login*",
+        "*://zhjwjs.scu.edu.cn/login*"
+      ]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://id.scu.edu.cn/*",
+    "https://id-443.webvpn.scu.edu.cn/*",
+    "https://https-id-scu-edu-cn-443.webvpn.scu.edu.cn/*",
+    "http://202.115.47.141/*",
+    "https://202.115.47.141/*",
+    "http://zhjw.scu.edu.cn/*",
+    "https://zhjw.scu.edu.cn/*",
+    "http://zhjwjs.scu.edu.cn/*",
+    "https://zhjwjs.scu.edu.cn/*"
+  ],
+  "offline_enabled": true,
+  "web_accessible_resources": [
+    {
+      "resources": ["js/*", "img/*", "model/*"],
+      "matches": ["*://*/*"]
+    }
+  ]
+}
