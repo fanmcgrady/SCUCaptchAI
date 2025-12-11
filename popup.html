@@ -149,24 +149,55 @@
         }
 
         .site-list {
-            background: rgba(255,255,255,0.1);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .site-button {
+            background: rgba(255,255,255,0.95);
+            border: none;
             border-radius: 8px;
             padding: 10px 12px;
-        }
-
-        .site-item {
-            font-size: 11px;
-            color: rgba(255,255,255,0.8);
-            padding: 4px 0;
+            font-size: 12px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            font-family: inherit;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .site-item::before {
-            content: "✓";
-            margin-right: 8px;
-            color: #4caf50;
-            font-weight: bold;
+        .site-button:hover {
+            background: rgba(255,255,255,1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .site-button:active {
+            transform: translateY(0);
+        }
+
+        .site-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .site-url {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .site-info {
+            flex: 1;
+        }
+
+        .site-icon {
+            font-size: 16px;
+            opacity: 0.6;
         }
 
         .footer {
@@ -224,12 +255,36 @@
         </div>
 
         <div class="supported-sites">
-            <h3>支持的网站</h3>
+            <h3>支持的网站 - 点击快速访问</h3>
             <div class="site-list">
-                <div class="site-item">统一身份认证 (id.scu.edu.cn)</div>
-                <div class="site-item">WebVPN 门户</div>
-                <div class="site-item">教务管理系统 (zhjw.scu.edu.cn)</div>
-                <div class="site-item">教师端教务系统 (zhjwjs.scu.edu.cn)</div>
+                <button class="site-button" data-url="https://id.scu.edu.cn/frontend/login">
+                    <div class="site-info">
+                        <div class="site-name">统一身份认证</div>
+                        <div class="site-url">id.scu.edu.cn</div>
+                    </div>
+                    <span class="site-icon">→</span>
+                </button>
+                <button class="site-button" data-url="https://webvpn.scu.edu.cn/">
+                    <div class="site-info">
+                        <div class="site-name">WebVPN 门户</div>
+                        <div class="site-url">webvpn.scu.edu.cn</div>
+                    </div>
+                    <span class="site-icon">→</span>
+                </button>
+                <button class="site-button" data-url="https://zhjw.scu.edu.cn/login">
+                    <div class="site-info">
+                        <div class="site-name">教务管理系统（学生端）</div>
+                        <div class="site-url">zhjw.scu.edu.cn</div>
+                    </div>
+                    <span class="site-icon">→</span>
+                </button>
+                <button class="site-button" data-url="https://zhjwjs.scu.edu.cn/login">
+                    <div class="site-info">
+                        <div class="site-name">教务管理系统（教师端）</div>
+                        <div class="site-url">zhjwjs.scu.edu.cn</div>
+                    </div>
+                    <span class="site-icon">→</span>
+                </button>
             </div>
         </div>
 

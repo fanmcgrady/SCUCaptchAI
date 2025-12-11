@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 绑定事件
     bindEvents();
+    
+    // 绑定网站按钮点击事件
+    bindSiteButtons();
 });
 
 /**
@@ -136,5 +139,21 @@ function updateAllIndicators() {
                 : checkbox.checked && masterEnabled;
             updateIndicator(indicatorEl, isActive);
         }
+    });
+}
+
+/**
+ * 绑定网站按钮点击事件
+ */
+function bindSiteButtons() {
+    const siteButtons = document.querySelectorAll('.site-button');
+    
+    siteButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const url = button.getAttribute('data-url');
+            if (url) {
+                chrome.tabs.create({ url });
+            }
+        });
     });
 }
