@@ -2,7 +2,9 @@
 
 四川大学网站验证码 AI 自动识别填写插件。
 
-![插件界面](img/page.png)
+<p align="center">
+  <img src="img/page.png" width="50%" alt="插件界面">
+</p>
 
 ## 支持网站
 
