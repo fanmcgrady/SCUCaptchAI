@@ -73,7 +73,7 @@ async function fillCaptcha(options) {
     if (isProcessing) return false;
     isProcessing = true;
     try {
-        const imageData = imRead('captcha-img', 80, 26, { isClass: true, normFactor: 255.0 });
+        const imageData = imRead('captcha-img', 80, 26, { isClass: true, normFactor: 255.0 * 255.0 });
         const result = await chrome.runtime.sendMessage({ ImageData: imageData, my: true });
         if (result) {
             const input = document.querySelector("input[placeholder='请输入验证码']")
