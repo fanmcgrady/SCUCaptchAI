@@ -2,7 +2,6 @@ import { getOption } from '../LoadOption.js';
 import { imRead } from '../publicCode.js';
 
 let isProcessing = false;
-const MAX_RETRIES = 3;
 
 export async function main() {
     try {
@@ -38,28 +37,14 @@ function initCaptchaHandler() {
     const captchaImg = document.querySelector('.captcha-img');
     if (!captchaImg) { console.warn('[SCUCaptchAI] 找不到验证码图片元素'); return; }
 
-    captchaImg.addEventListener('load', () => fillCaptchaWithRetry());
+    captchaImg.addEventListener('load', () => fillCaptcha());
     waitForImage(captchaImg)
-        .then(() => fillCaptchaWithRetry())
+        .then(() => fillCaptcha())
         .catch(err => console.warn('[SCUCaptchAI] 等待图片失败:', err));
 }
 
-async function fillCaptchaWithRetry() {
-    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-        const success = await fillCaptcha();
-        if (success) return;
-        if (attempt < MAX_RETRIES) {
-            console.log(`[SCUCaptchAI] 第 ${attempt} 次识别失败，刷新重试...`);
-            document.querySelector('.captcha-img')?.click();
-            const img = document.querySelector('.captcha-img');
-            if (img) await waitForImage(img).catch(() => {});
-        }
-    }
-    console.warn('[SCUCaptchAI] 验证码识别失败，已达最大重试次数');
-}
-
 async function fillCaptcha() {
-    if (isProcessing) return false;
+    if (isProcessing) return;
     isProcessing = true;
     try {
         const imageData = imRead('captcha-img', 80, 26, { isClass: true, normFactor: 255.0 * 255.0 });
@@ -77,13 +62,10 @@ async function fillCaptcha() {
                 input.dispatchEvent(new Event('input', { bubbles: true }));
                 input.dispatchEvent(new Event('change', { bubbles: true }));
                 console.log('[SCUCaptchAI] 验证码已填写:', result);
-                return true;
             }
         }
-        return false;
     } catch (error) {
         console.error('[SCUCaptchAI] 验证码处理失败:', error);
-        return false;
     } finally {
         isProcessing = false;
     }
