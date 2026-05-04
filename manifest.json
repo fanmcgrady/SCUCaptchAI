@@ -3,7 +3,7 @@
   "manifest_version": 3,
   "name": "SCUCaptchAI",
   "description": "四川大学统一门户验证码AI自动填写插件",
-  "version": "20251207",
+  "version": "4.1.0",
   "icons": {
     "16": "img/logo.png",
     "48": "img/logo.png",

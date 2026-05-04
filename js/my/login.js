@@ -1,8 +1,9 @@
 import { getOption } from '../LoadOption.js';
-import { imRead, sleep } from '../publicCode.js';
+import { imRead } from '../publicCode.js';
 
 // 防止重复识别的锁
 let isProcessing = false;
+const MAX_RETRIES = 3;
 
 /**
  * 主入口函数
@@ -39,6 +40,21 @@ function modifyPage() {
 }
 
 /**
+ * 等待图片真正加载完成
+ */
+function waitForImage(img, timeout = 5000) {
+    return new Promise((resolve, reject) => {
+        if (img.complete && img.naturalWidth > 0) {
+            resolve();
+            return;
+        }
+        const timer = setTimeout(() => reject(new Error('图片加载超时')), timeout);
+        img.addEventListener('load', () => { clearTimeout(timer); resolve(); }, { once: true });
+        img.addEventListener('error', () => { clearTimeout(timer); reject(new Error('图片加载失败')); }, { once: true });
+    });
+}
+
+/**
  * 初始化验证码处理器
  */
 function initCaptchaHandler() {
@@ -48,55 +64,71 @@ function initCaptchaHandler() {
         return;
     }
 
-    // 图片加载完成时识别
+    // 图片加载完成时识别（处理验证码刷新）
     captchaImg.addEventListener('load', () => {
-        fillCaptcha();
+        fillCaptchaWithRetry();
     });
 
-    // 延迟后尝试首次识别（图片可能已经加载）
-    sleep(500).then(fillCaptcha);
+    // 首次尝试（图片可能已经加载完成）
+    waitForImage(captchaImg)
+        .then(() => fillCaptchaWithRetry())
+        .catch(err => console.warn('[SCUCaptchAI] 等待图片失败:', err));
 }
 
 /**
- * 识别并填写验证码
+ * 带重试的验证码识别入口
+ */
+async function fillCaptchaWithRetry() {
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        const success = await fillCaptcha();
+        if (success) return;
+        if (attempt < MAX_RETRIES) {
+            console.log(`[SCUCaptchAI] 第 ${attempt} 次识别失败，刷新验证码重试...`);
+            // 点击验证码图片刷新
+            document.querySelector('.captcha-img')?.click();
+            // 等待新图片加载
+            const img = document.querySelector('.captcha-img');
+            if (img) {
+                await waitForImage(img).catch(() => {});
+            }
+        }
+    }
+    console.warn('[SCUCaptchAI] 验证码识别失败，已达最大重试次数');
+}
+
+/**
+ * 识别并填写验证码，返回是否成功
  */
 async function fillCaptcha() {
-    if (isProcessing) return;
+    if (isProcessing) return false;
     isProcessing = true;
 
     try {
-        // 读取验证码图片数据
-        // 注意：my模型使用 /255/255 的归一化（原始代码如此）
         const imageData = imRead('captcha-img', 80, 26, {
             isClass: true,
-            normFactor: 255.0 * 255.0
+            normFactor: 255.0
         });
 
-        // 发送到background进行识别
         const result = await chrome.runtime.sendMessage({
             ImageData: imageData,
             my: true
         });
 
         if (result) {
-            // 填写验证码
-            const input = document.querySelector('.ivu-input.ivu-input-default:nth-of-type(3)') 
-                || document.querySelector("input[placeholder='请输入验证码']");
-            
+            const input = document.querySelector("input[placeholder='请输入验证码']")
+                || document.querySelector('.ivu-input.ivu-input-default:nth-of-type(3)');
+
             if (input) {
                 input.value = result;
-                // 触发input事件以更新Vue/React状态
-                input.dispatchEvent(new InputEvent('input', {
-                    data: result,
-                    bubbles: true
-                }));
+                input.dispatchEvent(new InputEvent('input', { data: result, bubbles: true }));
                 console.log('[SCUCaptchAI] 验证码已填写:', result);
+                return true;
             }
-        } else {
-            console.warn('[SCUCaptchAI] 验证码识别失败');
         }
+        return false;
     } catch (error) {
         console.error('[SCUCaptchAI] 验证码处理失败:', error);
+        return false;
     } finally {
         isProcessing = false;
     }

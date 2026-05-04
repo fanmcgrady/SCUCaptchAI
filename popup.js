@@ -146,7 +146,7 @@ function updateAllIndicators() {
  * 绑定网站按钮点击事件
  */
 function bindSiteButtons() {
-    const siteButtons = document.querySelectorAll('.site-button');
+    const siteButtons = document.querySelectorAll('.site-item');
     
     siteButtons.forEach(button => {
         button.addEventListener('click', () => {

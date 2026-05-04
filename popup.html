@@ -11,77 +11,127 @@
         }
 
         body {
-            width: 320px;
+            width: 300px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-        }
-
-        .container {
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            margin-bottom: 16px;
-        }
-
-        .header h1 {
-            color: #fff;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .header .version {
-            color: rgba(255,255,255,0.7);
-            font-size: 12px;
-        }
-
-        .card {
             background: #fff;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: #222;
+        }
+
+        /* 顶部 header */
+        .header {
+            background: #8B1A1A;
+            padding: 16px 18px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header-title {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .header-sub {
+            color: rgba(255,255,255,0.65);
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .header-version {
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+            align-self: flex-start;
+            margin-top: 2px;
+        }
+
+        /* 分区标题 */
+        .section-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #8B1A1A;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 14px 18px 6px;
+        }
+
+        /* 设置卡片 */
+        .card {
+            margin: 0 12px;
+            background: #fafafa;
+            border: 1px solid #ebebeb;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         .setting-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
+            padding: 11px 14px;
             border-bottom: 1px solid #f0f0f0;
+            transition: background 0.15s;
         }
 
         .setting-item:last-child {
             border-bottom: none;
         }
 
-        .setting-info {
+        .setting-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             flex: 1;
         }
 
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #d0d0d0;
+            flex-shrink: 0;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .status-dot.active {
+            background: #4caf50;
+            box-shadow: 0 0 5px rgba(76,175,80,0.5);
+        }
+
+        .setting-info {}
+
         .setting-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            color: #333;
-            margin-bottom: 2px;
+            color: #222;
+            line-height: 1.3;
         }
 
         .setting-desc {
-            font-size: 11px;
-            color: #999;
+            font-size: 10px;
+            color: #aaa;
+            margin-top: 1px;
         }
 
-        /* 开关样式 */
+        /* 开关 */
         .switch {
             position: relative;
-            width: 44px;
-            height: 24px;
+            width: 40px;
+            height: 22px;
             flex-shrink: 0;
-            margin-left: 12px;
+            margin-left: 10px;
         }
 
         .switch input {
@@ -93,197 +143,190 @@
         .slider {
             position: absolute;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: 0.3s;
-            border-radius: 24px;
+            inset: 0;
+            background: #d0d0d0;
+            border-radius: 22px;
+            transition: background 0.25s;
         }
 
         .slider:before {
-            position: absolute;
             content: "";
-            height: 18px;
-            width: 18px;
+            position: absolute;
+            width: 16px;
+            height: 16px;
             left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.3s;
+            top: 3px;
+            background: #fff;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.25s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.25);
         }
 
         input:checked + .slider {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #8B1A1A;
         }
 
         input:checked + .slider:before {
-            transform: translateX(20px);
+            transform: translateX(18px);
         }
 
-        .status-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 6px;
-            background: #ccc;
+        input:disabled + .slider {
+            opacity: 0.45;
+            cursor: not-allowed;
         }
 
-        .status-indicator.active {
-            background: #4caf50;
-            box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+        /* 网站列表 */
+        .sites-card {
+            margin: 0 12px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ebebeb;
         }
 
-        .supported-sites {
-            margin-top: 16px;
-        }
-
-        .supported-sites h3 {
-            font-size: 12px;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .site-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-        }
-
-        .site-button {
-            background: rgba(255,255,255,0.95);
-            border: none;
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-size: 12px;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.2s;
+        .site-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            text-align: left;
-            font-family: inherit;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 10px 14px;
+            background: #fafafa;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.15s;
+            text-decoration: none;
+            gap: 10px;
         }
 
-        .site-button:hover {
-            background: rgba(255,255,255,1);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        .site-item:last-child {
+            border-bottom: none;
         }
 
-        .site-button:active {
-            transform: translateY(0);
+        .site-item:hover {
+            background: #f5eded;
         }
 
-        .site-name {
-            font-weight: 500;
-            margin-bottom: 2px;
+        .site-item:active {
+            background: #eedede;
         }
 
-        .site-url {
-            font-size: 10px;
-            color: #666;
+        .site-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #8B1A1A;
+            opacity: 0.5;
+            flex-shrink: 0;
         }
 
         .site-info {
             flex: 1;
         }
 
-        .site-icon {
-            font-size: 16px;
-            opacity: 0.6;
+        .site-name {
+            font-size: 12px;
+            font-weight: 500;
+            color: #222;
+            line-height: 1.3;
         }
 
+        .site-url {
+            font-size: 10px;
+            color: #bbb;
+            margin-top: 1px;
+        }
+
+        .site-arrow {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        /* footer */
         .footer {
             text-align: center;
-            margin-top: 16px;
-            color: rgba(255,255,255,0.6);
-            font-size: 11px;
+            padding: 10px 0 12px;
+            color: #ccc;
+            font-size: 10px;
         }
 
         .footer a {
-            color: rgba(255,255,255,0.8);
+            color: #8B1A1A;
+            opacity: 0.6;
             text-decoration: none;
         }
 
         .footer a:hover {
-            text-decoration: underline;
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>SCUCaptchAI</h1>
-            <div class="version" id="version">v4.0.0</div>
+    <div class="header">
+        <img class="header-logo" src="img/logo.png" alt="logo">
+        <div class="header-text">
+            <div class="header-title">SCUCaptchAI</div>
+            <div class="header-sub">四川大学验证码 AI 自动填写</div>
         </div>
+        <div class="header-version" id="version">v4.0.0</div>
+    </div>
 
-        <div class="card">
-            <div class="setting-item">
+    <div class="section-label">功能设置</div>
+    <div class="card">
+        <div class="setting-item">
+            <div class="setting-left">
+                <div class="status-dot" id="masterIndicator"></div>
                 <div class="setting-info">
-                    <div class="setting-title">
-                        <span class="status-indicator" id="masterIndicator"></span>
-                        总开关
-                    </div>
-                    <div class="setting-desc">启用/禁用所有功能</div>
+                    <div class="setting-title">总开关</div>
+                    <div class="setting-desc">启用 / 禁用所有功能</div>
                 </div>
-                <label class="switch">
-                    <input type="checkbox" id="MasterSwitch">
-                    <span class="slider"></span>
-                </label>
             </div>
-
-            <div class="setting-item">
+            <label class="switch">
+                <input type="checkbox" id="MasterSwitch">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting-item">
+            <div class="setting-left">
+                <div class="status-dot" id="yzmIndicator"></div>
                 <div class="setting-info">
-                    <div class="setting-title">
-                        <span class="status-indicator" id="yzmIndicator"></span>
-                        自动填写验证码
-                    </div>
-                    <div class="setting-desc">使用AI识别并自动填写登录验证码</div>
+                    <div class="setting-title">自动填写验证码</div>
+                    <div class="setting-desc">AI 识别并自动填写登录验证码</div>
                 </div>
-                <label class="switch">
-                    <input type="checkbox" id="LoginYZMSwitch">
-                    <span class="slider"></span>
-                </label>
             </div>
+            <label class="switch">
+                <input type="checkbox" id="LoginYZMSwitch">
+                <span class="slider"></span>
+            </label>
         </div>
+    </div>
 
-        <div class="supported-sites">
-            <h3>支持的网站 - 点击快速访问</h3>
-            <div class="site-list">
-                <button class="site-button" data-url="https://id.scu.edu.cn/frontend/login">
-                    <div class="site-info">
-                        <div class="site-name">统一身份认证</div>
-                        <div class="site-url">id.scu.edu.cn</div>
-                    </div>
-                    <span class="site-icon">→</span>
-                </button>
-                <button class="site-button" data-url="http://zhjw.scu.edu.cn/login">
-                    <div class="site-info">
-                        <div class="site-name">教务管理系统（学生端）</div>
-                        <div class="site-url">zhjw.scu.edu.cn</div>
-                    </div>
-                    <span class="site-icon">→</span>
-                </button>
-                <button class="site-button" data-url="http://zhjwjs.scu.edu.cn/login">
-                    <div class="site-info">
-                        <div class="site-name">教务管理系统（教师端）</div>
-                        <div class="site-url">zhjwjs.scu.edu.cn</div>
-                    </div>
-                    <span class="site-icon">→</span>
-                </button>
+    <div class="section-label">快速访问</div>
+    <div class="sites-card">
+        <div class="site-item" data-url="https://id.scu.edu.cn/frontend/login">
+            <div class="site-dot"></div>
+            <div class="site-info">
+                <div class="site-name">统一身份认证</div>
+                <div class="site-url">id.scu.edu.cn</div>
             </div>
+            <span class="site-arrow">›</span>
         </div>
+        <div class="site-item" data-url="http://zhjw.scu.edu.cn/login">
+            <div class="site-dot"></div>
+            <div class="site-info">
+                <div class="site-name">教务管理系统（学生端）</div>
+                <div class="site-url">zhjw.scu.edu.cn</div>
+            </div>
+            <span class="site-arrow">›</span>
+        </div>
+        <div class="site-item" data-url="http://zhjwjs.scu.edu.cn/login">
+            <div class="site-dot"></div>
+            <div class="site-info">
+                <div class="site-name">教务管理系统（教师端）</div>
+                <div class="site-url">zhjwjs.scu.edu.cn</div>
+            </div>
+            <span class="site-arrow">›</span>
+        </div>
+    </div>
 
-        <div class="footer">
-            Made with ❤️ by <a href="https://github.com/fanmcgrady">fanmcgrady</a>
-        </div>
+    <div class="footer">
+        Made with ♥ by <a href="https://github.com/fanmcgrady" target="_blank">fanmcgrady</a>
     </div>
 
     <script src="popup.js"></script>
