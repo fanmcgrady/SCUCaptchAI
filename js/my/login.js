@@ -79,8 +79,15 @@ async function fillCaptcha(options) {
             const input = document.querySelector("input[placeholder='请输入验证码']")
                 || document.querySelector('.ivu-input.ivu-input-default:nth-of-type(3)');
             if (input) {
-                input.value = result;
-                input.dispatchEvent(new InputEvent('input', { data: result, bubbles: true }));
+                // 通过原生 setter 绕过 Vue 的 value 拦截，确保响应式状态同步
+                const nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+                if (nativeSetter) {
+                    nativeSetter.call(input, result);
+                } else {
+                    input.value = result;
+                }
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.dispatchEvent(new Event('change', { bubbles: true }));
                 if (options.ShowResultSwitch) showResult(result);
                 if (options.AutoSubmitSwitch) setTimeout(() => document.querySelector('.login-btn')?.click(), 300);
                 console.log('[SCUCaptchAI] 验证码已填写:', result);
