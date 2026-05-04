@@ -6,16 +6,12 @@
 const SETTINGS = [
     { id: 'MasterSwitch', indicator: 'masterIndicator' },
     { id: 'LoginYZMSwitch', indicator: 'yzmIndicator' },
-    { id: 'AutoSubmitSwitch', indicator: 'autoSubmitIndicator' },
-    { id: 'ShowResultSwitch', indicator: 'showResultIndicator' },
 ];
 
 // 默认配置
 const DEFAULT_OPTIONS = {
     MasterSwitch: true,
     LoginYZMSwitch: true,
-    AutoSubmitSwitch: true,
-    ShowResultSwitch: true,
 };
 
 /**

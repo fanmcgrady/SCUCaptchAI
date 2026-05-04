@@ -4,8 +4,6 @@
 const DEFAULT_OPTIONS = {
     MasterSwitch: true,      // 总开关
     LoginYZMSwitch: true,    // 登录验证码自动填写
-    AutoSubmitSwitch: true,  // 识别后自动登录
-    ShowResultSwitch: true,  // 显示识别结果
 };
 
 /**

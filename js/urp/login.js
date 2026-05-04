@@ -9,7 +9,7 @@ export async function main() {
         const options = await getOption();
         if (!options.LoginYZMSwitch) return;
         showLoadingSuccess();
-        initCaptchaHandler(options);
+        initCaptchaHandler();
     } catch (error) {
         console.error('[SCUCaptchAI] 初始化失败:', error);
     }
@@ -34,30 +34,19 @@ function waitForImage(img, timeout = 5000) {
     });
 }
 
-function showResult(text) {
-    let el = document.getElementById('scucaptchai-result');
-    if (!el) {
-        el = document.createElement('span');
-        el.id = 'scucaptchai-result';
-        el.style.cssText = 'font-size:11px;color:#4caf50;margin-left:8px;vertical-align:middle;';
-        document.getElementById('captchaImg')?.insertAdjacentElement('afterend', el);
-    }
-    el.textContent = `识别: ${text}`;
-}
-
-function initCaptchaHandler(options) {
+function initCaptchaHandler() {
     const captchaImg = document.getElementById('captchaImg');
     if (!captchaImg) { console.warn('[SCUCaptchAI] 找不到验证码图片元素'); return; }
 
-    captchaImg.addEventListener('load', () => fillCaptchaWithRetry(options));
+    captchaImg.addEventListener('load', () => fillCaptchaWithRetry());
     waitForImage(captchaImg)
-        .then(() => fillCaptchaWithRetry(options))
+        .then(() => fillCaptchaWithRetry())
         .catch(err => console.warn('[SCUCaptchAI] 等待图片失败:', err));
 }
 
-async function fillCaptchaWithRetry(options) {
+async function fillCaptchaWithRetry() {
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-        const success = await fillCaptcha(options);
+        const success = await fillCaptcha();
         if (success) return;
         if (attempt < MAX_RETRIES) {
             console.log(`[SCUCaptchAI] 第 ${attempt} 次识别失败，刷新重试...`);
@@ -69,7 +58,7 @@ async function fillCaptchaWithRetry(options) {
     console.warn('[SCUCaptchAI] 验证码识别失败，已达最大重试次数');
 }
 
-async function fillCaptcha(options) {
+async function fillCaptcha() {
     if (isProcessing) return false;
     isProcessing = true;
     try {
@@ -79,13 +68,6 @@ async function fillCaptcha(options) {
             const input = document.getElementById('input_checkcode');
             if (input) {
                 input.value = result;
-                if (options.ShowResultSwitch) showResult(result);
-                if (options.AutoSubmitSwitch) setTimeout(() => {
-                    const btn = document.getElementById('loginBtn')
-                        || document.querySelector('input[type=submit]')
-                        || document.querySelector('button[type=submit]');
-                    btn?.click();
-                }, 300);
                 console.log('[SCUCaptchAI] 验证码已填写:', result);
                 return true;
             }
